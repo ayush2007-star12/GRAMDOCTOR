@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GramDoc</title>
+<meta name="description" content="GramDoc: health check, video consultation with a doctor, prescription and follow-up for villages.">
+<meta name="theme-color" content="#3e8e2b">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top no-print">
+  <div class="brand">GramDoc</div>
+  <div class="tools">
+    <span id="net" class="net" aria-live="polite"></span>
+    <button id="langBtn" class="small-btn" type="button" aria-label="Change language">हिंदी</button>
+  </div>
+</header>
+
+<nav class="tabs no-print" aria-label="Main">
+  <button type="button" data-view="check" class="tab on" data-i18n="tab_check"></button>
+  <button type="button" data-view="records" class="tab" data-i18n="tab_records"></button>
+  <button type="button" data-view="doctor" class="tab" data-i18n="tab_doctor"></button>
+</nav>
+
+<main>
+  <!-- 1. Health worker: new check -->
+  <section id="view-check" class="view">
+    <form id="checkForm" novalidate>
+      <div class="row-between">
+        <h1 data-i18n="check_title"></h1>
+        <button id="exampleBtn" class="small-btn" type="button" data-i18n="try_example"></button>
+      </div>
+
+      <fieldset>
+        <legend data-i18n="f_patient"></legend>
+        <label><span data-i18n="f_name"></span><input name="name" maxlength="80" autocomplete="off" required></label>
+        <div class="grid2">
+          <label><span data-i18n="f_age"></span><input name="age" type="number" inputmode="numeric" min="0" max="120" required></label>
+          <label><span data-i18n="f_gender"></span>
+            <select name="gender">
+              <option value="F" data-i18n="g_f"></option>
+              <option value="M" data-i18n="g_m"></option>
+              <option value="O" data-i18n="g_o"></option>
+            </select></label>
+        </div>
+        <div class="grid2">
+          <label><span data-i18n="f_village"></span><input name="village" maxlength="80" autocomplete="off"></label>
+          <label><span data-i18n="f_phone"></span><input name="phone" type="tel" inputmode="tel" maxlength="15" autocomplete="off"></label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend data-i18n="f_symptoms"></legend>
+        <div id="symptomBox" class="chips"></div>
+      </fieldset>
+
+      <fieldset>
+        <legend data-i18n="f_vitals"></legend>
+        <div class="grid2">
+          <label><span data-i18n="f_sbp"></span><input name="sbp" type="number" inputmode="numeric" min="50" max="300"></label>
+          <label><span data-i18n="f_dbp"></span><input name="dbp" type="number" inputmode="numeric" min="30" max="200"></label>
+        </div>
+        <div class="grid2">
+          <label><span data-i18n="f_sugar"></span><input name="sugar" type="number" inputmode="numeric" min="20" max="800"></label>
+          <label><span data-i18n="f_sugartype"></span>
+            <select name="sugarType">
+              <option value="random" data-i18n="st_random"></option>
+              <option value="fasting" data-i18n="st_fasting"></option>
+            </select></label>
+        </div>
+        <div class="grid3">
+          <label><span data-i18n="f_temp"></span><input name="temp" type="number" inputmode="decimal" step="0.1" min="30" max="45"></label>
+          <label><span data-i18n="f_spo2"></span><input name="spo2" type="number" inputmode="numeric" min="50" max="100"></label>
+          <label><span data-i18n="f_pulse"></span><input name="pulse" type="number" inputmode="numeric" min="20" max="250"></label>
+        </div>
+      </fieldset>
+
+      <p id="formError" class="error" role="alert" hidden></p>
+      <button class="btn big" type="submit" data-i18n="btn_check"></button>
+    </form>
+  </section>
+
+  <!-- 2. Records -->
+  <section id="view-records" class="view" hidden>
+    <div class="row-between">
+      <h1 data-i18n="rec_title"></h1>
+      <button id="csvBtn" class="small-btn" type="button" data-i18n="btn_csv"></button>
+    </div>
+    <div id="recList"></div>
+  </section>
+
+  <!-- 3. Doctor -->
+  <section id="view-doctor" class="view" hidden>
+    <h1 data-i18n="doc_title"></h1>
+    <div id="docOpen" class="card">
+      <p data-i18n="doc_intro"></p>
+      <label><span data-i18n="doc_paste"></span><input id="pasteLink" autocomplete="off"></label>
+      <button id="openCaseBtn" class="btn" type="button" data-i18n="btn_open_case"></button>
+      <p id="pasteError" class="error" hidden></p>
+    </div>
+    <div id="docCase" hidden></div>
+  </section>
+
+  <!-- 4. One visit in detail -->
+  <section id="view-detail" class="view" hidden>
+    <div id="detail"></div>
+  </section>
+</main>
+
+<footer class="no-print">
+  <p data-i18n="disclaimer"></p>
+</footer>
+
+<script src="i18n.js"></script>
+<script src="triage.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

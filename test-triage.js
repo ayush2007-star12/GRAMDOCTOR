@@ -1,0 +1,28 @@
+const T = require('./triage.js'); let fail = 0;
+function eq(name, got, want){ if(got!==want){fail++;console.log('FAIL',name,'got',got,'want',want);} }
+const a = (p)=>T.assess(p).level;
+eq('normal', a({age:30,symptoms:[],vitals:{sbp:118,dbp:76,sugar:90,sugarType:'fasting',temp:36.8,spo2:98,pulse:76}}), 'normal');
+eq('bp high', a({age:50,symptoms:[],vitals:{sbp:150,dbp:95}}), 'soon');
+eq('bp crisis no sym', a({age:50,symptoms:[],vitals:{sbp:190,dbp:110}}), 'urgent');
+eq('bp crisis headache', a({age:50,symptoms:['headache'],vitals:{sbp:190,dbp:110}}), 'emergency');
+eq('bp low', a({age:50,symptoms:[],vitals:{sbp:85,dbp:55}}), 'urgent');
+eq('spo2 88', a({age:50,symptoms:[],vitals:{spo2:88}}), 'emergency');
+eq('spo2 93', a({age:50,symptoms:[],vitals:{spo2:93}}), 'urgent');
+eq('sugar fasting 130', a({age:40,symptoms:[],vitals:{sugar:130,sugarType:'fasting'}}), 'soon');
+eq('sugar random 130', a({age:40,symptoms:[],vitals:{sugar:130,sugarType:'random'}}), 'normal');
+eq('sugar random 250', a({age:40,symptoms:[],vitals:{sugar:250,sugarType:'random'}}), 'soon');
+eq('sugar 320', a({age:40,symptoms:[],vitals:{sugar:320,sugarType:'random'}}), 'urgent');
+eq('sugar 320 vomit', a({age:40,symptoms:['vomiting'],vitals:{sugar:320,sugarType:'random'}}), 'emergency');
+eq('sugar low', a({age:40,symptoms:[],vitals:{sugar:55,sugarType:'random'}}), 'urgent');
+eq('fever 38.5 adult', a({age:30,symptoms:['fever'],vitals:{temp:38.5}}), 'soon');
+eq('fever 38.5 child', a({age:3,symptoms:['fever'],vitals:{temp:38.5}}), 'urgent');
+eq('fever 40', a({age:30,symptoms:[],vitals:{temp:40}}), 'urgent');
+eq('chest pain', a({age:45,symptoms:['chest_pain'],vitals:{}}), 'emergency');
+eq('breathless', a({age:45,symptoms:['breathless'],vitals:{}}), 'urgent');
+eq('cold only', a({age:25,symptoms:['cough'],vitals:{temp:36.9}}), 'soon');
+eq('pulse 130', a({age:25,symptoms:[],vitals:{pulse:130}}), 'urgent');
+eq('pulse 105', a({age:25,symptoms:[],vitals:{pulse:105}}), 'soon');
+eq('empty vitals', a({age:25,symptoms:[],vitals:{}}), 'normal');
+eq('bp only sbp ignored', a({age:25,symptoms:[],vitals:{sbp:200}}), 'normal');
+console.log(fail?fail+' failed':'all triage tests passed');
+process.exit(fail?1:0);
